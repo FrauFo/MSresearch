@@ -1,0 +1,1990 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Исследование когнитивно-эмоциональной регуляции у пациентов с рассеянным склерозом</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 10px;
+    }
+
+    .screen {
+      display: none;
+      animation: fadeIn 0.6s ease-in-out;
+    }
+
+    .active {
+      display: block;
+    }
+
+    .header {
+      text-align: center;
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+    }
+
+    .header h1 {
+      color: #4a5568;
+      margin-bottom: 10px;
+      font-size: 2.2em;
+    }
+
+    .header p {
+      color: #718096;
+      font-size: 1.1em;
+    }
+
+    .questionnaire {
+      background: white;
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+    }
+
+    .instructions {
+      background: #f7fafc;
+      border-left: 4px solid #4299e1;
+      padding: 25px;
+      margin-bottom: 30px;
+      border-radius: 10px;
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .instructions h3 {
+      color: #2d3748;
+      margin-bottom: 15px;
+      font-size: 1.3em;
+    }
+
+    .subject-info {
+      background: rgba(248, 249, 250, 0.9);
+      padding: 30px;
+      border-radius: 20px;
+      margin: 25px 0;
+      text-align: left;
+      border: 1px solid rgba(233, 236, 239, 0.8);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+    }
+
+    .subject-info input, .subject-info select, .subject-info textarea {
+      padding: 14px 18px;
+      margin: 10px 5px;
+      border: 2px solid #e9ecef;
+      border-radius: 12px;
+      font-size: 16px;
+      background: white;
+      transition: all 0.3s ease;
+      width: 100%;
+      max-width: 500px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .subject-info input:focus, .subject-info select:focus, .subject-info textarea:focus {
+      border-color: #667eea;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #4a5568;
+    }
+
+    button {
+      background: linear-gradient(135deg, #90caf9 0%, #d7bcdc 100%);
+      color: white;
+      border: none;
+      padding: 18px 36px;
+      font-size: 17px;
+      font-weight: 600;
+      border-radius: 14px;
+      cursor: pointer;
+      margin: 12px;
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      box-shadow: 0 8px 20px rgba(144, 202, 249, 0.3);
+    }
+
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(144, 202, 249, 0.4);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    /* TMT стили */
+    .tmt-container {
+      position: relative;
+      width: 1100px;
+      height: 750px;
+      margin: 30px auto;
+      border: 3px solid #e9ecef;
+      background: rgba(248, 249, 250, 0.9);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+      border-radius: 20px;
+      overflow: auto;
+    }
+
+    .tmt-circle {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: 3px solid #495057;
+      background: linear-gradient(145deg, #ffffff, #f8f9fa);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 18px;
+      user-select: none;
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      z-index: 2;
+      color: #212529;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    }
+
+    .tmt-circle:hover {
+      transform: scale(1.15) translateY(-3px);
+      box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+      border-color: #90caf9;
+    }
+
+    .tmt-circle.completed {
+      background: linear-gradient(145deg, #4CAF50, #45a049);
+      color: white !important;
+      border-color: #388E3C;
+      transform: scale(1.05);
+      box-shadow: 0 8px 20px rgba(76, 175, 80, 0.3);
+    }
+
+    .tmt-circle.error {
+      background: linear-gradient(145deg, #f44336, #e53935);
+      color: white !important;
+      border-color: #D32F2F;
+      animation: shake 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      box-shadow: 0 8px 20px rgba(244, 67, 54, 0.3);
+    }
+
+    .tmt-line {
+      position: absolute;
+      background: linear-gradient(90deg, #90caf9, #ce93d8);
+      height: 5px;
+      transform-origin: 0 0;
+      z-index: 1;
+      pointer-events: none;
+      border-radius: 3px;
+      box-shadow: 0 2px 8px rgba(144, 202, 249, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .timer {
+      font-size: 32px;
+      font-weight: 700;
+      margin: 25px;
+      color: #495057;
+      background: linear-gradient(135deg, #90caf9 0%, #ce93d8 100%);
+      padding: 18px 35px;
+      border-radius: 16px;
+      display: inline-block;
+      color: white;
+      box-shadow: 0 8px 20px rgba(144, 202, 249, 0.3);
+    }
+
+    .error-count {
+      font-size: 20px;
+      font-weight: 600;
+      color: #495057;
+      background: rgba(233, 236, 239, 0.8);
+      padding: 12px 24px;
+      border-radius: 12px;
+      display: inline-block;
+      margin: 15px;
+      border: 2px solid #dee2e6;
+    }
+
+    /* Струп стили */
+    .stroop-card {
+      margin: 30px 0;
+    }
+
+    .stimulus-grid {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 8px;
+      margin: 30px 0;
+      padding: 20px;
+      background: rgba(240, 249, 255, 0.7);
+      border-radius: 15px;
+      border: 1px solid #e1f5fe;
+      font-family: 'Georgia', serif;
+    }
+
+    .word-stimulus {
+      font-size: 14px;
+      font-weight: 600;
+      padding: 10px 5px;
+      cursor: pointer;
+      border: 2px solid #e1f5fe;
+      border-radius: 8px;
+      background: white;
+      transition: all 0.3s ease;
+      color: #37474f;
+      text-align: center;
+    }
+
+    .word-stimulus:hover {
+      border-color: #4fc3f7;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(79, 195, 247, 0.15);
+    }
+
+    .word-stimulus.answered {
+      cursor: not-allowed;
+      opacity: 0.7;
+      transform: none;
+    }
+
+    .word-stimulus.answered.correct {
+      border-color: #4CAF50;
+      background: #f1f8e9;
+    }
+
+    .word-stimulus.answered.incorrect {
+      border-color: #f44336;
+      background: #ffebee;
+    }
+
+    .hexagon-stimulus {
+      width: 50px;
+      height: 58px;
+      margin: 3px;
+      cursor: pointer;
+      display: inline-block;
+      border: 2px solid #e1f5fe;
+      transition: all 0.3s ease;
+      position: relative;
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .hexagon-stimulus:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+    }
+
+    .hexagon-stimulus.answered {
+      cursor: not-allowed;
+      opacity: 0.7;
+      transform: none;
+    }
+
+    .hexagon-stimulus.answered.correct {
+      border-color: #4CAF50;
+      box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+    }
+
+    .hexagon-stimulus.answered.incorrect {
+      border-color: #f44336;
+      box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3);
+    }
+
+    .response-buttons {
+      margin: 30px;
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .response-btn {
+      padding: 15px 25px;
+      margin: 5px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 2px solid #546e7a;
+      border-radius: 12px;
+      background: white;
+      color: #546e7a;
+      transition: all 0.3s ease;
+      min-width: 120px;
+    }
+
+    .response-btn:hover {
+      background: #546e7a;
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(84, 110, 122, 0.2);
+    }
+
+    /* COPE и CERQ стили */
+    .question {
+      margin-bottom: 25px;
+      padding: 20px;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .question:hover {
+      border-color: #cbd5e0;
+      background: #f8fafc;
+    }
+
+    .question.error {
+      border-color: #f44336;
+      background: #ffebee;
+    }
+
+    .question-number {
+      font-weight: bold;
+      color: #4a5568;
+      margin-bottom: 10px;
+      font-size: 1.1em;
+    }
+
+    .question-text {
+      margin-bottom: 15px;
+      font-size: 1.05em;
+      color: #2d3748;
+    }
+
+    .options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+    }
+
+    .option {
+      display: flex;
+      align-items: center;
+      padding: 10px 15px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .option:hover {
+      border-color: #4299e1;
+      background: #ebf8ff;
+    }
+
+    .option input {
+      margin-right: 10px;
+    }
+
+    .option.selected {
+      border-color: #4299e1;
+      background: #4299e1;
+      color: white;
+    }
+
+    .submit-btn {
+      display: block;
+      width: 200px;
+      margin: 40px auto 0;
+      padding: 15px 30px;
+      background: linear-gradient(135deg, #90caf9 0%, #ce93d8 100%);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      font-size: 1.1em;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(144, 202, 249, 0.4);
+    }
+
+    .progress-indicator {
+      font-size: 16px;
+      font-weight: 600;
+      color: #546e7a;
+      margin: 15px 0;
+      padding: 10px 20px;
+      background: rgba(240, 249, 255, 0.8);
+      border-radius: 10px;
+      display: inline-block;
+    }
+
+    .test-results {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 10px;
+      margin: 20px 0;
+      border-left: 4px solid #28a745;
+    }
+
+    .error-sequence {
+      background: #ffebee;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 15px 0;
+      border-left: 4px solid #f44336;
+    }
+
+    /* Скрытые элементы статистики */
+    .hidden-stats {
+      display: none !important;
+    }
+
+    /* Мобильная адаптация TMT */
+    @media (max-width: 768px) {
+      .tmt-container {
+        width: 100%;
+        height: 400px;
+        transform: scale(0.7);
+        transform-origin: top center;
+        margin: 10px auto;
+        border: 2px solid #e9ecef;
+        overflow: scroll;
+      }
+      
+      .tmt-circle {
+        width: 40px;
+        height: 40px;
+        font-size: 12px;
+        font-weight: bold;
+      }
+      
+      .timer, .error-count {
+        font-size: 16px;
+        padding: 8px 12px;
+        margin: 5px;
+        display: block;
+        text-align: center;
+      }
+      
+      .stimulus-grid {
+        grid-template-columns: repeat(5, 1fr);
+      }
+      
+      .options {
+        grid-template-columns: 1fr;
+      }
+      
+      .hexagon-stimulus {
+        width: 35px;
+        height: 40px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .tmt-container {
+        height: 350px;
+        transform: scale(0.6);
+      }
+      
+      .tmt-circle {
+        width: 35px;
+        height: 35px;
+        font-size: 11px;
+      }
+    }
+
+    @media (max-width: 375px) {
+      .tmt-container {
+        height: 300px;
+        transform: scale(0.5);
+      }
+    }
+
+    /* Улучшение для тач-устройств */
+    button, .response-btn, .option, .tmt-circle, .word-stimulus, .hexagon-stimulus {
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+
+    /* Убираем выделение при тапе */
+    * {
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    /* Но оставляем выделение для полей ввода */
+    input, textarea, select {
+      -webkit-user-select: text;
+      user-select: text;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Экран приветствия -->
+    <div id="welcome" class="screen active">
+      <div class="header">
+        <h1>Здравствуйте, уважаемые участники исследования!</h1>
+      </div>
+      <div class="instructions">
+        <h3>Меня зовут Фокина Татьяна, я студентка 5 курса Московского института психоанализа.</h3>
+        <p>Я провожу психологическое исследование в рамках выпускной квалификационной работы по теме: «Когнитивно-эмоциональная регуляция у пациентов с рассеянным склерозом».</p>
+        <p><strong>Это займёт примерно ~20-25 минут.</strong></p>
+        <p>Все полученные данные будут использованны исключительно в обобщенном виде.</p>
+        <p>Отвечайте честно, ведь правильных или неправильных ответов нет.</p>
+        <p><strong>Благодарю Вас за участие!</strong></p>
+      </div>
+      <button onclick="showScreen('demographics')">Начать исследование</button>
+    </div>
+
+    <!-- Демографические данные -->
+    <div id="demographics" class="screen">
+      <div class="header">
+        <h1>Анкетные данные</h1>
+      </div>
+      <div class="subject-info">
+        <div class="form-group">
+          <label>1. Инициалы (например, Фокина Т.Н.) *</label>
+          <input type="text" id="initials" placeholder="Введите ваши инициалы" required>
+        </div>
+
+        <div class="form-group">
+          <label>2. Пол: *</label>
+          <select id="gender" required>
+            <option value="">Выберите пол</option>
+            <option value="male">Мужской</option>
+            <option value="female">Женский</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>3. Возраст: *</label>
+          <select id="age" required>
+            <option value="">Выберите возрастную категорию</option>
+            <option value="under18">До 18 лет</option>
+            <option value="18-24">18–24 года</option>
+            <option value="25-34">25–34 года</option>
+            <option value="35-44">35–44 года</option>
+            <option value="45-54">45–54 года</option>
+            <option value="55plus">55 лет и старше</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>4. Образование: *</label>
+          <select id="education" required>
+            <option value="">Выберите уровень образования</option>
+            <option value="secondary">Среднее</option>
+            <option value="special">Среднее специальное</option>
+            <option value="unfinished">Неоконченное высшее</option>
+            <option value="higher">Высшее</option>
+            <option value="scientific">Ученая степень (кандидат, доктор наук)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>5. Место проживания: *</label>
+          <input type="text" id="country" placeholder="Страна" required>
+          <input type="text" id="city" placeholder="Город" style="margin-top: 10px;" required>
+          <select id="residence_type" style="margin-top: 10px;" required>
+            <option value="">Тип населенного пункта</option>
+            <option value="city">Город</option>
+            <option value="village">Село/деревня</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>6. Религиозные убеждения (по желанию):</label>
+          <select id="religion">
+            <option value="">Выберите вариант</option>
+            <option value="orthodoxy">Православие</option>
+            <option value="islam">Ислам</option>
+            <option value="catholicism">Католицизм</option>
+            <option value="atheism">Атеизм/агностицизм</option>
+            <option value="other">Другое</option>
+          </select>
+          <input type="text" id="religion_other" placeholder="Укажите другое" style="display: none; margin-top: 10px;">
+        </div>
+
+        <div class="form-group">
+          <label>7. Имеете ли вы поставленный диагноз рассеянный склероз? *</label>
+          <select id="has_ms" required>
+            <option value="">Выберите ответ</option>
+            <option value="yes">Да</option>
+            <option value="no">Нет</option>
+          </select>
+        </div>
+
+        <div class="form-group" id="ms_duration_group" style="display: none;">
+          <label>8. Сколько прошло времени с постановки диагноза?</label>
+          <input type="text" id="ms_duration" placeholder="Например, 2 года">
+        </div>
+
+        <div class="form-group" id="ms_course_group" style="display: none;">
+          <label>9. Какое течение болезни у вас?</label>
+          <input type="text" id="ms_course" placeholder="Опишите течение болезни">
+        </div>
+
+        <div class="form-group">
+          <label>10. Есть ли еще диагнозы помимо РС?</label>
+          <textarea id="other_diagnoses" placeholder="Опишите другие диагнозы, если есть" rows="3"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>11. Проходите ли вы терапию у психолога?</label>
+          <select id="psychologist_therapy">
+            <option value="">Выберите ответ</option>
+            <option value="yes">Да</option>
+            <option value="no">Нет</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>12. Проходите ли вы медикаментозное лечение? Если да, то какое?</label>
+          <textarea id="medication" placeholder="Опишите медикаментозное лечение" rows="3"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>13. Если вас интересуют результаты, то оставьте любую соц.сеть или почту:</label>
+          <input type="text" id="contact_info" placeholder="Email или ссылка на соц.сеть">
+        </div>
+
+        <div class="form-group">
+          <label>14. Дополнительные комментарии (если хотите что-то добавить):</label>
+          <textarea id="comments" placeholder="Ваши комментарии" rows="4"></textarea>
+        </div>
+      </div>
+      <button onclick="validateDemographics()">Продолжить</button>
+    </div>
+
+    <!-- TMT Инструкция -->
+    <div id="tmt-instruction" class="screen">
+      <div class="header">
+        <h1>ТМТ</h1>
+      </div>
+      <div class="instructions">
+        <p><strong>Инструкция:</strong> Соедините цифры и буквы в последовательности: 1-А-2-Б-3-В и т.д.</p>
+        <p><strong>Тест завершится автоматически после выбора последнего элемента.</strong></p>
+      </div>
+      <button onclick="startTMT_B()">Начать</button>
+    </div>
+
+    <!-- TMT Тестирование -->
+    <div id="tmt-test" class="screen">
+      <div class="header">
+        <h2>ТМТ</h2>
+      </div>
+      <div class="hidden-stats">
+        <div class="timer">⏱️ Время: <span id="tmt-timer">0</span> сек</div>
+        <div class="error-count">❌ Ошибок: <strong id="error-count">0</strong></div>
+        <div class="progress-indicator">Прогресс: <span id="tmt-progress">0</span>/26</div>
+      </div>
+      <div class="tmt-container" id="tmt-board"></div>
+    </div>
+
+    <!-- TMT Результаты -->
+    <div id="tmt-results" class="screen">
+      <div class="header">
+        <h2>Тест TMT завершен</h2>
+      </div>
+      <div class="instructions">
+        <p>Переходите к следующему опроснику.</p>
+      </div>
+      <button onclick="showScreen('cope-instruction')">Далее</button>
+    </div>
+
+    <!-- COPE Инструкция -->
+    <div id="cope-instruction" class="screen">
+      <div class="header">
+        <h1>Опросник COPE</h1>
+      </div>
+      <div class="instructions">
+        <p><strong>Инструкция:</strong> Прочитайте каждое утверждение и отметьте, насколько часто вы используете описанную стратегию в сложных жизненных ситуациях. Выбирайте ответ, который наиболее точно отражает ваше обычное поведение.</p>
+        <p><strong style="color: #f44336;">Внимание: Все вопросы обязательны для ответа!</strong></p>
+      </div>
+      <button onclick="startCOPE()">Начать</button>
+    </div>
+
+    <!-- COPE Тестирование -->
+    <div id="cope-test" class="screen">
+      <div class="header">
+        <h1>Опросник COPE</h1>
+      </div>
+      <div class="questionnaire">
+        <div id="cope-error-message" style="display: none; background: #ffebee; color: #f44336; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #f44336;">
+          <strong>Пожалуйста, ответьте на все вопросы перед продолжением!</strong>
+        </div>
+        <form id="cope-form"></form>
+        <button type="button" class="submit-btn" onclick="finishCOPE()">Завершить</button>
+      </div>
+    </div>
+
+    <!-- CERQ Инструкция -->
+    <div id="cerq-instruction" class="screen">
+      <div class="header">
+        <h1>Опросник CERQ</h1>
+      </div>
+      <div class="instructions">
+        <p><strong>Инструкция:</strong> Перед тем как приступить к заданию, вспомните трудные, стрессовые ситуации. Прочитав высказывание, оцените насколько мысли такого рода свойственны для вас. При ответе ориентируйтесь на ваши чувства и мысли, а не на предпринимаемые действия.</p>
+        <p><strong style="color: #f44336;">Внимание: Все вопросы обязательны для ответа!</strong></p>
+      </div>
+      <button onclick="startCERQ()">Начать</button>
+    </div>
+
+    <!-- CERQ Тестирование -->
+    <div id="cerq-test" class="screen">
+      <div class="header">
+        <h1>Опросник CERQ</h1>
+      </div>
+      <div class="questionnaire">
+        <div id="cerq-error-message" style="display: none; background: #ffebee; color: #f44336; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #f44336;">
+          <strong>Пожалуйста, ответьте на все вопросы перед продолжением!</strong>
+        </div>
+        <form id="cerq-form"></form>
+        <button type="button" class="submit-btn" onclick="finishCERQ()">Завершить</button>
+      </div>
+    </div>
+
+    <!-- Струп Инструкция 1 -->
+    <div id="stroop-instruction1" class="screen">
+      <div class="header">
+        <h1>Тест Струпа</h1>
+      </div>
+      <div class="instructions">
+        <p><strong>Инструкция:</strong> Для вас будут представлены три карточки поочередно. Внимательно читайте задания к ним!</p>
+        <p><strong>Первая карточка.</strong> Отмечайте какое слово написано. Используйте кнопки выше для выбора ответа.</p>
+      </div>
+      <button onclick="startStroopCard1()">Начать</button>
+    </div>
+
+    <!-- Струп Карта 1 -->
+    <div id="stroop-card1" class="screen">
+      <div class="header">
+        <h2>Тест Струпа - Карточка 1</h2>
+      </div>
+      <div class="hidden-stats">
+        <div class="timer">⏱️ Время: <span id="stroop-timer1">0</span> сек</div>
+        <div class="error-count">❌ Ошибок: <strong id="stroop-errors1">0</strong></div>
+        <div class="progress-indicator">Прогресс: <span id="stroop-progress1">0</span>/100</div>
+      </div>
+      <div class="response-buttons">
+        <button class="response-btn" onclick="stroopResponse('синий')">СИНИЙ</button>
+        <button class="response-btn" onclick="stroopResponse('красный')">КРАСНЫЙ</button>
+        <button class="response-btn" onclick="stroopResponse('желтый')">ЖЕЛТЫЙ</button>
+        <button class="response-btn" onclick="stroopResponse('зеленый')">ЗЕЛЕНЫЙ</button>
+      </div>
+      <div class="stimulus-grid" id="stroop-grid1"></div>
+    </div>
+
+    <!-- Струп Результаты 1 -->
+    <div id="stroop-results1" class="screen">
+      <div class="header">
+        <h2>Карточка 1 завершена</h2>
+      </div>
+      <div class="instructions">
+        <p>Переходите к следующей.</p>
+      </div>
+      <button onclick="showScreen('stroop-instruction2')">Далее</button>
+    </div>
+
+    <!-- Струп Инструкция 2 -->
+    <div id="stroop-instruction2" class="screen">
+      <div class="header">
+        <h1>Тест Струпа - Карточка 2</h1>
+      </div>
+      <div class="instructions">
+        <p><strong>Вторая карточка.</strong> Отмечайте цвет шестиугольников. Используйте кнопки выше для выбора ответа.</p>
+      </div>
+      <button onclick="startStroopCard2()">Начать</button>
+    </div>
+
+    <!-- Струп Карта 2 -->
+    <div id="stroop-card2" class="screen">
+      <div class="header">
+        <h2>Тест Струпа - Карточка 2</h2>
+      </div>
+      <div class="hidden-stats">
+        <div class="timer">⏱️ Время: <span id="stroop-timer2">0</span> сек</div>
+        <div class="error-count">❌ Ошибок: <strong id="stroop-errors2">0</strong></div>
+        <div class="progress-indicator">Прогресс: <span id="stroop-progress2">0</span>/100</div>
+      </div>
+      <div class="response-buttons">
+        <button class="response-btn" onclick="stroopResponse2('синий')">СИНИЙ</button>
+        <button class="response-btn" onclick="stroopResponse2('красный')">КРАСНЫЙ</button>
+        <button class="response-btn" onclick="stroopResponse2('желтый')">ЖЕЛТЫЙ</button>
+        <button class="response-btn" onclick="stroopResponse2('зеленый')">ЗЕЛЕНЫЙ</button>
+      </div>
+      <div class="stimulus-grid" id="stroop-grid2"></div>
+    </div>
+
+    <!-- Струп Результаты 2 -->
+    <div id="stroop-results2" class="screen">
+      <div class="header">
+        <h2>Карточка 2 завершена</h2>
+      </div>
+      <div class="instructions">
+        <p> Переходите к следующей.</p>
+      </div>
+      <button onclick="showScreen('stroop-instruction3')">Далее</button>
+    </div>
+
+    <!-- Струп Инструкция 3 -->
+    <div id="stroop-instruction3" class="screen">
+      <div class="header">
+        <h1>Тест Струпа - Карточка 3</h1>
+      </div>
+      <div class="instructions">
+        <p><strong>Третья карточка.</strong> Отмечайте цвет шрифта, которым написано слово, игнорируя само слово. Используйте кнопки выше для выбора ответа.</p>
+      </div>
+      <button onclick="startStroopCard3()">Начать</button>
+    </div>
+
+    <!-- Струп Карта 3 -->
+    <div id="stroop-card3" class="screen">
+      <div class="header">
+        <h2>Тест Струпа - Карточка 3</h2>
+      </div>
+      <div class="hidden-stats">
+        <div class="timer">⏱️ Время: <span id="stroop-timer3">0</span> сек</div>
+        <div class="error-count">❌ Ошибок: <strong id="stroop-errors3">0</strong></div>
+        <div class="progress-indicator">Прогресс: <span id="stroop-progress3">0</span>/100</div>
+      </div>
+      <div class="response-buttons">
+        <button class="response-btn" onclick="stroopResponse3('синий')">СИНИЙ</button>
+        <button class="response-btn" onclick="stroopResponse3('красный')">КРАСНЫЙ</button>
+        <button class="response-btn" onclick="stroopResponse3('желтый')">ЖЕЛТЫЙ</button>
+        <button class="response-btn" onclick="stroopResponse3('зеленый')">ЗЕЛЕНЫЙ</button>
+      </div>
+      <div class="stimulus-grid" id="stroop-grid3"></div>
+    </div>
+
+    <!-- Струп Результаты 3 -->
+    <div id="stroop-results3" class="screen">
+      <div class="header">
+        <h2>Карточка 3 завершена</h2>
+      </div>
+      <div class="instructions">
+        <p>Все карточки завершены!</p>
+      </div>
+      <button onclick="finishAllTests()">Завершить исследование</button>
+    </div>
+
+    <!-- Финальный экран -->
+    <div id="final" class="screen">
+      <div class="header">
+        <h1>Исследование завершено!</h1>
+      </div>
+      <div class="instructions">
+        <h3>Благодарю за участие в исследовании!</h3>
+        <p>Все данные обрабатываются анонимно и конфиденциально</p>
+        <p>Если вы оставили контактные данные для обратной связи, я свяжусь с вами в течение 3-4  недель после завершения сбора данных.</p>
+        <p>С уважением, Фокина Татьяна<br>Студентка Московского института психоанализа</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Функция для отправки данных на сервер
+async function sendDataToServer(data) {
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwp0lFbwPrEKpkSjGpGNNu3KiHjfMWnHQxhg24jmikx6p-MCasiLPVjpsAZSfJdpinX6Q/exec'; // Замените на URL вашего Apps Script
+    
+    try {
+        const response = await fetch(SCRIPT_URL, {
+            redirect: 'follow',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'text/plain;charset=utf-8',
+            },
+            body: JSON.stringify(data)
+        });
+        if (!response.ok){
+          throw new Error (`Response status: ${response.status}`);
+        }
+        const result = await response.json();
+        
+        if (result.success) {
+            console.log('Данные успешно отправлены:', result);
+            return true;
+        } else {
+            console.error('Ошибка при отправке данных:', result);
+            return false;
+        }
+    } catch (error) {
+        console.error('Ошибка сети:', error);
+        // Сохраняем данные локально для последующей отправки
+        saveDataLocally(data);
+        return false;
+    }
+}
+
+// Локальное сохранение данных при ошибке сети
+function saveDataLocally(data) {
+    const pendingData = JSON.parse(localStorage.getItem('pendingResearchData') || '[]');
+    pendingData.push({
+        data: data,
+        timestamp: new Date().toISOString(),
+        attempts: 0
+    });
+    
+    localStorage.setItem('pendingResearchData', JSON.stringify(pendingData));
+    console.log('Данные сохранены локально для последующей отправки');
+}
+
+// Функция завершения всех тестов
+function finishAllTests() {
+    researchData.timestamp = new Date().toISOString();
+    
+    // Показываем индикатор загрузки
+    showLoadingIndicator();
+    
+    // Отправляем данные на сервер
+    sendDataToServer(researchData).then(success => {
+        hideLoadingIndicator();
+        
+        if (success) {
+            showScreen('final');
+        } 
+    });
+}
+
+// Вспомогательные функции UI
+function showLoadingIndicator() {
+    const loader = document.createElement('div');
+    loader.id = 'loading-indicator';
+    loader.innerHTML = `
+        <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+                   background: rgba(255,255,255,0.9); display: flex; justify-content: center; 
+                   align-items: center; z-index: 1000;">
+            <div style="background: white; padding: 30px; border-radius: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.2);">
+                <h3>Отправка данных...</h3>
+                <p>Пожалуйста, подождите</p>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(loader);
+}
+
+function hideLoadingIndicator() {
+    const loader = document.getElementById('loading-indicator');
+    if (loader) {
+        loader.remove();
+    }
+}
+
+    // ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ДЛЯ ХРАНЕНИЯ ДАННЫХ
+const researchData = {
+    demographics: {},
+    tmt: {},
+    cope: {},
+    cerq: {},
+    stroop: {},
+    timestamp: new Date().toISOString()
+};
+
+// ФУНКЦИИ ДЛЯ РАБОТЫ С ЭКРАНАМИ
+function showScreen(screenId) {
+    document.querySelectorAll('.screen').forEach(screen => {
+        screen.classList.remove('active');
+    });
+    document.getElementById(screenId).classList.add('active');
+    window.scrollTo(0, 0);
+}
+
+// ВАЛИДАЦИЯ ДЕМОГРАФИЧЕСКИХ ДАННЫХ
+function validateDemographics() {
+    const required = ['initials', 'gender', 'age', 'education', 'has_ms', 'country', 'city', 'residence_type'];
+    let valid = true;
+
+    required.forEach(field => {
+        const element = document.getElementById(field);
+        if (!element.value) {
+            valid = false;
+            element.style.borderColor = '#f44336';
+        } else {
+            element.style.borderColor = '#e9ecef';
+        }
+    });
+
+    if (!valid) {
+        alert('Пожалуйста, заполните все обязательные поля (отмечены красным)');
+        return;
+    }
+
+    // Сохраняем демографические данные
+    researchData.demographics = {
+        initials: document.getElementById('initials').value,
+        gender: document.getElementById('gender').value,
+        age: document.getElementById('age').value,
+        education: document.getElementById('education').value,
+        country: document.getElementById('country').value,
+        city: document.getElementById('city').value,
+        residence_type: document.getElementById('residence_type').value,
+        religion: document.getElementById('religion').value,
+        religion_other: document.getElementById('religion_other').value,
+        has_ms: document.getElementById('has_ms').value,
+        ms_duration: document.getElementById('ms_duration').value,
+        ms_course: document.getElementById('ms_course').value,
+        other_diagnoses: document.getElementById('other_diagnoses').value,
+        psychologist_therapy: document.getElementById('psychologist_therapy').value,
+        medication: document.getElementById('medication').value,
+        contact_info: document.getElementById('contact_info').value,
+        comments: document.getElementById('comments').value
+    };
+
+    showScreen('tmt-instruction');
+}
+
+// ОБРАБОТКА РЕЛИГИОЗНЫХ УБЕЖДЕНИЙ
+document.getElementById('religion').addEventListener('change', function() {
+    const otherField = document.getElementById('religion_other');
+    otherField.style.display = this.value === 'other' ? 'block' : 'none';
+});
+
+// ОБРАБОТКА ДИАГНОЗА РС
+document.getElementById('has_ms').addEventListener('change', function() {
+    const durationGroup = document.getElementById('ms_duration_group');
+    const courseGroup = document.getElementById('ms_course_group');
+    
+    if (this.value === 'yes') {
+        durationGroup.style.display = 'block';
+        courseGroup.style.display = 'block';
+    } else {
+        durationGroup.style.display = 'none';
+        courseGroup.style.display = 'none';
+    }
+});
+
+// TMT ЛОГИКА
+const tmtBLayout = [
+    { left: 150, top: 60, value: "10", display: "10" },
+    { left: 350, top: 90, value: "Ж", display: "Ж" },
+    { left: 550, top: 70, value: "11", display: "11" },
+    { left: 750, top: 50, value: "6", display: "6" },
+    { left: 900, top: 80, value: "В", display: "В" },
+    { left: 80, top: 180, value: "Г", display: "Г" },
+
+    { left: 120, top: 280, value: "А", display: "А" },
+    { left: 60, top: 380, value: "Ё", display: "Ё" },
+    { left: 100, top: 450, value: "И", display: "И" },
+    { left: 400, top: 250, value: "3", display: "3" },
+    { left: 500, top: 200, value: "9", display: "9" },
+    { left: 600, top: 300, value: "1", display: "1" },
+
+    { left: 300, top: 320, value: "8", display: "8" },
+    { left: 850, top: 200, value: "Е", display: "Е" },
+    { left: 950, top: 280, value: "12", display: "12" },
+    { left: 880, top: 350, value: "Б", display: "Б" },
+    { left: 200, top: 520, value: "К", display: "К" },
+    { left: 350, top: 580, value: "Д", display: "Д" },
+
+    { left: 500, top: 540, value: "З", display: "З" },
+    { left: 650, top: 520, value: "4", display: "4" },
+    { left: 800, top: 580, value: "Й", display: "Й" },
+    { left: 100, top: 620, value: "5", display: "5" },
+    { left: 180, top: 680, value: "13", display: "13" },
+    { left: 900, top: 620, value: "Л", display: "Л" },
+
+    { left: 980, top: 680, value: "2", display: "2" },
+    { left: 850, top: 650, value: "7", display: "7" }
+];
+
+const correctSequence = ["1", "А", "2", "Б", "3", "В", "4", "Г", "5", "Д", "6", "Е", "7", "Ё", "8", "Ж", "9", "З", "10", "И", "11", "Й", "12", "К", "13", "Л"];
+
+let tmtData = {
+    startTime: 0,
+    timerInterval: null,
+    currentSequence: [],
+    errors: 0,
+    completed: false,
+    lines: [],
+    expectedNextIndex: 0
+};
+
+// Показываем предупреждение для мобильных перед TMT
+function showTMTMobileWarning() {
+    if (window.innerWidth <= 768) {
+        document.getElementById('tmt-mobile-warning').style.display = 'block';
+    }
+}
+
+function startTMT_B() {
+    showScreen('tmt-test');
+    createTMTBoard();
+    startTMTTimer();
+    tmtData.startTime = Date.now();
+    updateTMTProgress();
+}
+
+function createTMTBoard() {
+    const board = document.getElementById('tmt-board');
+    board.innerHTML = '';
+    tmtData.lines = [];
+    tmtData.currentSequence = [];
+    tmtData.expectedNextIndex = 0;
+    tmtData.errors = 0;
+    tmtData.completed = false;
+
+    // Компактный layout для мобильных
+    const isMobile = window.innerWidth <= 768;
+    
+    const mobileLayout = [
+    { left: 75, top: 30, value: "10", display: "10" },
+    { left: 175, top: 45, value: "Ж", display: "Ж" },
+    { left: 275, top: 35, value: "11", display: "11" },
+    { left: 375, top: 25, value: "6", display: "6" },
+    { left: 450, top: 40, value: "В", display: "В" },
+    { left: 40, top: 90, value: "Г", display: "Г" },
+
+    { left: 60, top: 140, value: "А", display: "А" },
+    { left: 30, top: 190, value: "Ё", display: "Ё" },
+    { left: 50, top: 225, value: "И", display: "И" },
+    { left: 200, top: 125, value: "3", display: "3" },
+    { left: 250, top: 100, value: "9", display: "9" },
+    { left: 300, top: 150, value: "1", display: "1" },
+
+    { left: 150, top: 160, value: "8", display: "8" },
+    { left: 425, top: 100, value: "Е", display: "Е" },
+    { left: 475, top: 140, value: "12", display: "12" },
+    { left: 440, top: 175, value: "Б", display: "Б" },
+    { left: 100, top: 260, value: "К", display: "К" },
+    { left: 175, top: 290, value: "Д", display: "Д" }
+    ,
+    { left: 250, top: 270, value: "З", display: "З" },
+    { left: 325, top: 260, value: "4", display: "4" },
+    { left: 400, top: 290, value: "Й", display: "Й" },
+    { left: 50, top: 310, value: "5", display: "5" },
+    { left: 90, top: 340, value: "13", display: "13" },
+    { left: 450, top: 310, value: "Л", display: "Л" },
+
+    { left: 490, top: 340, value: "2", display: "2" },
+    { left: 425, top: 325, value: "7", display: "7" }
+];
+
+    const layout = isMobile ? mobileLayout : tmtBLayout;
+
+    layout.forEach((item, index) => {
+        const circle = document.createElement('div');
+        circle.className = `tmt-circle`;
+        circle.textContent = item.display;
+        circle.dataset.value = item.value;
+        circle.dataset.index = index;
+        
+        // Уменьшаем размер для мобильных
+        if (isMobile) {
+            circle.style.width = '30px';
+            circle.style.height = '30px';
+            circle.style.fontSize = '12px';
+        }
+        
+        circle.style.left = `${item.left}px`;
+        circle.style.top = `${item.top}px`;
+        
+        circle.onclick = () => handleTMTClick(item.value, circle);
+        board.appendChild(circle);
+    });
+
+    document.getElementById('error-count').textContent = '0';
+    updateTMTProgress();
+}
+
+function handleTMTClick(value, circleElement) {
+    if (tmtData.completed) return;
+
+    const expectedValue = correctSequence[tmtData.expectedNextIndex];
+    
+    if (value === expectedValue) {
+        circleElement.classList.add('completed');
+        
+        if (tmtData.expectedNextIndex > 0) {
+            const prevValue = correctSequence[tmtData.expectedNextIndex - 1];
+            drawTMTLine(prevValue, value);
+        }
+        
+        tmtData.currentSequence.push(value);
+        tmtData.expectedNextIndex++;
+        
+        if (tmtData.expectedNextIndex >= correctSequence.length) {
+            finishTMT();
+        }
+        
+    } else {
+        circleElement.classList.add('error');
+        tmtData.errors++;
+        tmtData.currentSequence.push(`${value}*`);
+        document.getElementById('error-count').textContent = tmtData.errors;
+        
+        setTimeout(() => {
+            circleElement.classList.remove('error');
+        }, 1000);
+    }
+    
+    updateTMTProgress();
+}
+
+function drawTMTLine(fromValue, toValue) {
+    const fromCircle = findTMTCircleByValue(fromValue);
+    const toCircle = findTMTCircleByValue(toValue);
+    
+    if (!fromCircle || !toCircle) return;
+    
+    const fromRect = fromCircle.getBoundingClientRect();
+    const toRect = toCircle.getBoundingClientRect();
+    const boardRect = document.getElementById('tmt-board').getBoundingClientRect();
+    
+    const fromX = fromRect.left + fromRect.width/2 - boardRect.left;
+    const fromY = fromRect.top + fromRect.height/2 - boardRect.top;
+    const toX = toRect.left + toRect.width/2 - boardRect.left;
+    const toY = toRect.top + toRect.height/2 - boardRect.top;
+    
+    const length = Math.sqrt(Math.pow(toX - fromX, 2) + Math.pow(toY - fromY, 2));
+    const angle = Math.atan2(toY - fromY, toX - fromX) * 180 / Math.PI;
+    
+    const line = document.createElement('div');
+    line.className = 'tmt-line';
+    line.style.width = length + 'px';
+    line.style.left = fromX + 'px';
+    line.style.top = fromY + 'px';
+    line.style.transform = `rotate(${angle}deg)`;
+    
+    document.getElementById('tmt-board').appendChild(line);
+    tmtData.lines.push(line);
+}
+
+function findTMTCircleByValue(value) {
+    const circles = document.querySelectorAll('.tmt-circle');
+    for (let circle of circles) {
+        if (circle.dataset.value === value) {
+            return circle;
+        }
+    }
+    return null;
+}
+
+function startTMTTimer() {
+    clearInterval(tmtData.timerInterval);
+    tmtData.timerInterval = setInterval(() => {
+        const elapsed = Math.floor((Date.now() - tmtData.startTime) / 1000);
+        document.getElementById('tmt-timer').textContent = elapsed;
+    }, 1000);
+}
+
+function updateTMTProgress() {
+    document.getElementById('tmt-progress').textContent = tmtData.expectedNextIndex;
+}
+
+function finishTMT() {
+    tmtData.completed = true;
+    clearInterval(tmtData.timerInterval);
+    
+    const totalTime = Math.floor((Date.now() - tmtData.startTime) / 1000);
+    
+    researchData.tmt = {
+        time: totalTime,
+        errors: tmtData.errors,
+        sequence: tmtData.currentSequence.join(' → ')
+    };
+    
+    showScreen('tmt-results');
+}
+
+// COPE ЛОГИКА
+const copeQuestions = [
+    "Я стараюсь найти плюсы в произошедшем",
+    "Я погружаюсь в работу или другие дела, чтобы отключиться от проблем",
+    "Я расстраиваюсь и даю выход своим эмоциям",
+    "Я ищу совета у других людей, что делать дальше",
+    "Я сосредоточиваю усилия на том, чтобы как-то решить проблему",
+    "Я говорю себе: «Этого не может быть»",
+    "Я надеюсь на то, что Бог мне поможет",
+    "Я стараюсь воспринимать произошедшее с юмором",
+    "Я признаюсь себе, что ничего не могу поделать с проблемой, и перестаю пытаться",
+    "Я стараюсь удерживать себя от скоропалительных шагов",
+    "Я обсуждаю с кем-то то, что я сейчас чувствую",
+    "Я принимаю успокоительные или выпиваю, чтобы мне стало лучше",
+    "Я стараюсь привыкнуть к мысли, что это случилось, адаптироваться к ситуации",
+    "Я обсуждаю случившееся, чтобы лучше понять ситуацию",
+    "Я стараюсь решать проблему, не отвлекаясь на другие дела и мысли",
+    "Я предаюсь фантазиям на другие темы, чтобы отвлечься",
+    "Я расстраиваюсь, нервничаю, переживаю",
+    "Я прошу помощи у Бога",
+    "Я стараюсь спланировать и обдумать свои дальнейшие действия",
+    "Я перевожу случившееся в шутку",
+    "Я стараюсь принять то, что случилось, привыкнуть к этому",
+    "Я стараюсь ничего не предпринимать, пока ситуация не улучшится",
+    "Я стараюсь получить эмоциональную поддержку у друзей или родных",
+    "Я не предпринимаю активных действий",
+    "Я предпринимаю какие-то еще действия, стараясь преодолеть сложившуюся ситуацию",
+    "Я стараюсь отключиться на какое-то время, принимая алкоголь или лекарства",
+    "Мне не хочется верить, что это произошло",
+    "Я даю выход своим переживаниям",
+    "Я пытаюсь посмотреть на ситуацию с более позитивной стороны, в ином свете",
+    "Я говорю с кем-нибудь, кто мог бы конкретно помочь решить мою проблему",
+    "Я сплю больше обычного, стараясь забыть о проблеме",
+    "Я придумываю, как имеет смысл дальше действовать",
+    "Я полностью концентрируюсь на решении этой проблемы и, если необходимо, откладываю в сторону другие дела",
+    "Я ищу сочувствия и понимания у других людей",
+    "Я выпиваю или принимаю лекарства, чтобы поменьше думать о проблеме",
+    "Я шучу по поводу случившегося",
+    "Я перестаю пытаться добиться своего (получить то, что я хочу)",
+    "Я ищу что-то хорошее в том, что произошло",
+    "Я думаю, как лучше всего я могу справиться с этой проблемой",
+    "Я делаю вид, что ничего не произошло",
+    "Я стараюсь не действовать слишком поспешно, чтобы не ухудшить ситуацию",
+    "Я стараюсь, чтобы другие дела не мешали мне прилагать максимум усилий, чтобы справиться с проблемой",
+    "Я иду в кино или смотрю телевизор, чтобы меньше думать о проблеме",
+    "Я стараюсь принять ситуацию, сжиться с ней",
+    "Я спрашиваю людей, у которых была аналогичная проблема, как они ее решали",
+    "Я переживаю и активно проявляю свои чувства",
+    "Я предпринимаю активные действия, чтобы справиться с проблемой",
+    "Я пытаюсь найти утешение в вере (религии)",
+    "Я заставляю себя ждать, когда наступит подходящий момент и можно будет действовать",
+    "Я нахожу в случившемся забавные моменты",
+    "Я снижаю количество усилий, направленных на решение этой проблемы",
+    "Я обсуждаю свои переживания с кем-то из моих близких",
+    "Я принимаю алкоголь или успокоительные, потому что это помогает мне преодолеть проблему",
+    "Я учусь жить с этим",
+    "Я откладываю другие дела в сторону, чтобы сосредоточиться на решении проблемы",
+    "Я тщательно обдумываю шаги, которые буду предпринимать для решения проблемы",
+    "Я просто делаю вид, что ничего не случилось",
+    "Я последовательно, шаг за шагом делаю то, что нужно",
+    "Я стараюсь, чтобы этот опыт чему-то меня научил",
+    "Я молюсь (больше, чем обычно)"
+];
+
+function startCOPE() {
+    showScreen('cope-test');
+    generateCOPEQuestions();
+}
+
+function generateCOPEQuestions() {
+    const form = document.getElementById('cope-form');
+    form.innerHTML = '';
+
+    copeQuestions.forEach((question, index) => {
+        const questionDiv = document.createElement('div');
+        questionDiv.className = 'question';
+        questionDiv.id = `cope-question-${index}`;
+        
+        const questionNumber = document.createElement('div');
+        questionNumber.className = 'question-number';
+        questionNumber.textContent = `Вопрос ${index + 1}`;
+        
+        const questionText = document.createElement('div');
+        questionText.className = 'question-text';
+        questionText.textContent = question;
+        
+        const optionsDiv = document.createElement('div');
+        optionsDiv.className = 'options';
+        
+        const options = ['Нет', 'Изредка', 'Иногда', 'Часто'];
+        options.forEach(option => {
+            const optionDiv = document.createElement('div');
+            optionDiv.className = 'option';
+            
+            const input = document.createElement('input');
+            input.type = 'radio';
+            input.name = `cope-question-${index}`;
+            input.value = option;
+            input.id = `cope-q${index}-${option}`;
+            input.required = true;
+            
+            const label = document.createElement('label');
+            label.htmlFor = `cope-q${index}-${option}`;
+            label.textContent = option;
+            
+            optionDiv.appendChild(input);
+            optionDiv.appendChild(label);
+            
+            optionDiv.addEventListener('click', function() {
+                const siblings = optionsDiv.querySelectorAll('.option');
+                siblings.forEach(sib => sib.classList.remove('selected'));
+                this.classList.add('selected');
+                input.checked = true;
+                
+                // Убираем ошибку если вопрос отвечен
+                questionDiv.classList.remove('error');
+            });
+            
+            optionsDiv.appendChild(optionDiv);
+        });
+        
+        questionDiv.appendChild(questionNumber);
+        questionDiv.appendChild(questionText);
+        questionDiv.appendChild(optionsDiv);
+        form.appendChild(questionDiv);
+    });
+}
+
+function finishCOPE() {
+    let allAnswered = true;
+    const copeAnswers = {};
+    const errorMessage = document.getElementById('cope-error-message');
+    
+    // Сбрасываем все ошибки
+    document.querySelectorAll('#cope-form .question').forEach(q => q.classList.remove('error'));
+    errorMessage.style.display = 'none';
+    
+    for (let i = 0; i < copeQuestions.length; i++) {
+        const selectedOption = document.querySelector(`input[name="cope-question-${i}"]:checked`);
+        if (!selectedOption) {
+            allAnswered = false;
+            // Помечаем вопрос с ошибкой
+            document.getElementById(`cope-question-${i}`).classList.add('error');
+        } else {
+            copeAnswers[`question_${i + 1}`] = selectedOption.value;
+        }
+    }
+    
+    if (!allAnswered) {
+        errorMessage.style.display = 'block';
+        errorMessage.scrollIntoView({ behavior: 'smooth' });
+        return;
+    }
+    
+    researchData.cope = copeAnswers;
+    
+    showScreen('cerq-instruction');
+}
+
+// CERQ ЛОГИКА
+const cerqQuestions = [
+    "Я чувствую, что в происходящем следует винить себя.",
+    "Я думаю, что мне придется принять тот факт, что это произошло.",
+    "Я часто задумываюсь о том, что я чувствую по отношению к тому, что произошло.",
+    "Я думаю о вещах поприятнее, чем то, что со мной произошло.",
+    "Я думаю о том, что мне лучше всего сделать.",
+    "Я думаю, что эта ситуация меня чему-то научит.",
+    "Я думаю, что все могло бы быть гораздо хуже.",
+    "Я часто думаю, что то, что случилось со мной, гораздо хуже того, что случается с другими.",
+    "Я чувствую, что в случившимся следует винить окружающих.",
+    "Я чувствую, что я единственный(ая), кто в ответе за то, что произошло.",
+    "Я думаю, что мне придется принять ситуацию такой, какая она есть.",
+    "Я озабочен(а) тем, что я думаю и чувствую по отношению к тому, что произошло.",
+    "Я думаю о приятном, о том, что не имеет никакого отношения к произошедшему.",
+    "Я думаю о том, как мне лучше всего справиться с этой ситуацией.",
+    "Я думаю, что стану сильнее в результате этого.",
+    "Я думаю, что другие проходят через куда более трудные испытания.",
+    "Я постоянно думаю о том, как ужасно то, что со мной случилось.",
+    "Я чувствую, что окружающие несут ответственность за то, что со мной случилось.",
+    "Я думаю об ошибках, которые я совершил(а).",
+    "Я думаю, что я не могу ничего изменить.",
+    "Я хочу понять, почему я чувствую то, что я чувствую по отношению к тому, что произошло.",
+    "Я думаю о чем-нибудь хорошем вместо того, чтобы думать о том, что произошло.",
+    "Я думаю о том, как изменить ситуацию.",
+    "Я думаю, что у этой ситуации есть и положительные стороны.",
+    "Мне кажется, что это не самое плохое, что могло случиться.",
+    "Я часто думаю, что то, что со мной случилось – это худшее, что вообще может произойти с человеком.",
+    "Я думаю об ошибках, которые допустили окружающие в этой ситуации.",
+    "Я думаю, что в целом причина всему находится во мне.",
+    "Я думаю, что мне нужно научиться жить с этим.",
+    "Я подробно концентрируюсь на чувствах, которые пробудила во мне ситуация.",
+    "Я думаю о своем позитивном опыте.",
+    "Я продумываю план того, что лучше всего сделать в этой ситуации.",
+    "Я ищу позитивные стороны в сложившейся ситуации.",
+    "Я говорю себе, что бывают в жизни ситуации и похуже.",
+    "Я постоянно думаю о том, как ужасна случившаяся ситуация.",
+    "Я чувствую, что в целом причиной случившемуся является то, что сделали окружающие."
+];
+
+function startCERQ() {
+    showScreen('cerq-test');
+    generateCERQQuestions();
+}
+
+function generateCERQQuestions() {
+    const form = document.getElementById('cerq-form');
+    form.innerHTML = '';
+
+    cerqQuestions.forEach((question, index) => {
+        const questionDiv = document.createElement('div');
+        questionDiv.className = 'question';
+        questionDiv.id = `cerq-question-${index}`;
+        
+        const questionNumber = document.createElement('div');
+        questionNumber.className = 'question-number';
+        questionNumber.textContent = `Вопрос ${index + 1}`;
+        
+        const questionText = document.createElement('div');
+        questionText.className = 'question-text';
+        questionText.textContent = question;
+        
+        const optionsDiv = document.createElement('div');
+        optionsDiv.className = 'options';
+        
+        const options = [
+            {value: 1, text: 'почти никогда'},
+            {value: 2, text: 'иногда'},
+            {value: 3, text: 'регулярно'},
+            {value: 4, text: 'часто'},
+            {value: 5, text: 'почти всегда'}
+        ];
+        
+        options.forEach(option => {
+            const optionDiv = document.createElement('div');
+            optionDiv.className = 'option';
+            
+            const input = document.createElement('input');
+            input.type = 'radio';
+            input.name = `cerq-question-${index}`;
+            input.value = option.value;
+            input.id = `cerq-q${index}-${option.value}`;
+            input.required = true;
+            
+            const label = document.createElement('label');
+            label.htmlFor = `cerq-q${index}-${option.value}`;
+            label.textContent = option.text;
+            
+            optionDiv.appendChild(input);
+            optionDiv.appendChild(label);
+            
+            optionDiv.addEventListener('click', function() {
+                const siblings = optionsDiv.querySelectorAll('.option');
+                siblings.forEach(sib => sib.classList.remove('selected'));
+                this.classList.add('selected');
+                input.checked = true;
+                
+                // Убираем ошибку если вопрос отвечен
+                questionDiv.classList.remove('error');
+            });
+            
+            optionsDiv.appendChild(optionDiv);
+        });
+        
+        questionDiv.appendChild(questionNumber);
+        questionDiv.appendChild(questionText);
+        questionDiv.appendChild(optionsDiv);
+        form.appendChild(questionDiv);
+    });
+}
+
+function finishCERQ() {
+    let allAnswered = true;
+    const cerqAnswers = {};
+    const errorMessage = document.getElementById('cerq-error-message');
+    
+    // Сбрасываем все ошибки
+    document.querySelectorAll('#cerq-form .question').forEach(q => q.classList.remove('error'));
+    errorMessage.style.display = 'none';
+    
+    for (let i = 0; i < cerqQuestions.length; i++) {
+        const selectedOption = document.querySelector(`input[name="cerq-question-${i}"]:checked`);
+        if (!selectedOption) {
+            allAnswered = false;
+            // Помечаем вопрос с ошибкой
+            document.getElementById(`cerq-question-${i}`).classList.add('error');
+        } else {
+            cerqAnswers[`question_${i + 1}`] = parseInt(selectedOption.value);
+        }
+    }
+    
+    if (!allAnswered) {
+        errorMessage.style.display = 'block';
+        errorMessage.scrollIntoView({ behavior: 'smooth' });
+        return;
+    }
+    
+    researchData.cerq = cerqAnswers;
+    
+    showScreen('stroop-instruction1');
+}
+
+// СТРУП ЛОГИКА
+const colors = ['синий', 'красный', 'желтый', 'зеленый'];
+
+// Данные для карточек Струпа
+const stroopCard1Data = [
+    ['синий', 'зеленый', 'красный', 'желтый', 'синий', 'зеленый', 'желтый', 'синий', 'красный', 'зеленый'],
+    ['зеленый', 'синий', 'красный', 'желтый', 'зеленый', 'красный', 'синий', 'желтый', 'зеленый', 'красный'],
+    ['зеленый', 'красный', 'желтый', 'зеленый', 'желтый', 'синий', 'зеленый', 'желтый', 'красный', 'синий'],
+    ['синий', 'зеленый', 'желтый', 'красный', 'синий', 'желтый', 'красный', 'зеленый', 'желтый', 'красный'],
+    ['красный', 'синий', 'зеленый', 'желтый', 'синий', 'зеленый', 'красный', 'синий', 'желтый', 'зеленый'],
+    ['синий', 'желтый', 'зеленый', 'синий', 'красный', 'желтый', 'синий', 'зеленый', 'красный', 'желтый'],
+    ['красный', 'синий', 'желтый', 'красный', 'синий', 'зеленый', 'желтый', 'синий', 'желтый', 'красный'],
+    ['зеленый', 'желтый', 'синий', 'зеленый', 'синий', 'красный', 'желтый', 'красный', 'синий', 'зеленый'],
+    ['красный', 'зеленый', 'синий', 'красный', 'желтый', 'синий', 'зеленый', 'красный', 'желтый', 'синий'],
+    ['зеленый', 'желтый', 'красный', 'желтый', 'синий', 'зеленый', 'красный', 'желтый', 'зеленый', 'красный']
+];
+
+const stroopCard2Data = [
+    ['красный', 'желтый', 'синий', 'зеленый', 'красный', 'синий', 'желтый', 'зеленый', 'красный', 'желтый'],
+    ['синий', 'зеленый', 'красный', 'желтый', 'синий', 'красный', 'зеленый', 'желтый', 'синий', 'зеленый'],
+    ['желтый', 'синий', 'желтый', 'красный', 'синий', 'желтый', 'красный', 'зеленый', 'желтый', 'синий'],
+    ['красный', 'синий', 'зеленый', 'желтый', 'зеленый', 'красный', 'синий', 'желтый', 'зеленый', 'красный'],
+    ['желтый', 'красный', 'синий', 'зеленый', 'красный', 'синий', 'желтый', 'красный', 'синий', 'зеленый'],
+    ['зеленый', 'красный', 'зеленый', 'желтый', 'синий', 'желтый', 'красный', 'синий', 'зеленый', 'синий'],
+    ['синий', 'желтый', 'красный', 'синий', 'зеленый', 'желтый', 'зеленый', 'синий', 'красный', 'желтый'],
+    ['красный', 'синий', 'желтый', 'красный', 'зеленый', 'синий', 'зеленый', 'красный', 'желтый', 'зеленый'],
+    ['зеленый', 'синий', 'красный', 'зеленый', 'синий', 'красный', 'желтый', 'зеленый', 'синий', 'желтый'],
+    ['желтый', 'красный', 'зеленый', 'синий', 'красный', 'зеленый', 'синий', 'желтый', 'зеленый', 'красный']
+];
+
+const stroopCard3Data = {
+    words: [
+        ['синий', 'зеленый', 'красный', 'желтый', 'синий', 'зеленый', 'желтый', 'синий', 'красный', 'зеленый'],
+        ['зеленый', 'синий', 'красный', 'желтый', 'зеленый', 'красный', 'синий', 'желтый', 'зеленый', 'красный'],
+        ['зеленый', 'красный', 'желтый', 'зеленый', 'желтый', 'синий', 'зеленый', 'желтый', 'красный', 'синий'],
+        ['синий', 'зеленый', 'желтый', 'красный', 'синий', 'желтый', 'красный', 'зеленый', 'желтый', 'красный'],
+        ['красный', 'синий', 'зеленый', 'желтый', 'синий', 'зеленый', 'красный', 'синий', 'желтый', 'зеленый'],
+        ['синий', 'желтый', 'зеленый', 'синий', 'красный', 'желтый', 'синий', 'зеленый', 'красный', 'желтый'],
+        ['красный', 'синий', 'желтый', 'красный', 'синий', 'зеленый', 'желтый', 'синий', 'желтый', 'красный'],
+        ['зеленый', 'желтый', 'синий', 'зеленый', 'синий', 'красный', 'желтый', 'красный', 'синий', 'зеленый'],
+        ['красный', 'зеленый', 'синий', 'красный', 'желтый', 'синий', 'зеленый', 'красный', 'желтый', 'синий'],
+        ['зеленый', 'желтый', 'красный', 'желтый', 'синий', 'зеленый', 'красный', 'желтый', 'зеленый', 'красный']
+    ],
+    colors: [
+        ['красный', 'желтый', 'зеленый', 'синий', 'желтый', 'красный', 'зеленый', 'синий', 'красный', 'желтый'],
+        ['зеленый', 'желтый', 'синий', 'красный', 'зеленый', 'синий', 'красный', 'желтый', 'синий', 'зеленый'],
+        ['синий', 'зеленый', 'красный', 'синий', 'желтый', 'синий', 'желтый', 'синий', 'зеленый', 'желтый'],
+        ['красный', 'желтый', 'синий', 'зеленый', 'синий', 'желтый', 'зеленый', 'синий', 'красный', 'зеленый'],
+        ['желтый', 'зеленый', 'синий', 'желтый', 'красный', 'синий', 'зеленый', 'желтый', 'синий', 'желтый'],
+        ['желтый', 'красный', 'зеленый', 'красный', 'желтый', 'зеленый', 'красный', 'желтый', 'зеленый', 'красный'],
+        ['зеленый', 'синий', 'красный', 'зеленый', 'желтый', 'синий', 'зеленый', 'красный', 'синий', 'желтый'],
+        ['красный', 'синий', 'желтый', 'зеленый', 'синий', 'красный', 'синий', 'желтый', 'зеленый', 'синий'],
+        ['зеленый', 'желтый', 'красный', 'синий', 'зеленый', 'желтый', 'синий', 'красный', 'синий', 'зеленый'],
+        ['желтый', 'красный', 'синий', 'зеленый', 'синий', 'красный', 'желтый', 'зеленый', 'красный', 'желтый']
+    ]
+};
+
+let currentStroopCard = 1;
+let stroopTimerInterval;
+let stroopData = {
+    card1: { startTime: 0, errors: 0, time: 0, responses: [] },
+    card2: { startTime: 0, errors: 0, time: 0, responses: [] },
+    card3: { startTime: 0, errors: 0, time: 0, responses: [] }
+};
+
+// Переменные для автоматического перехода
+let currentStroopIndex = 0;
+let stroopElements = [];
+
+function startStroopCard1() {
+    currentStroopCard = 1;
+    currentStroopIndex = 0;
+    stroopElements = [];
+    showScreen('stroop-card1');
+    displayStroopCard1();
+    startStroopTimer(1);
+    stroopData.card1.startTime = Date.now();
+    stroopData.card1.errors = 0;
+    stroopData.card1.responses = [];
+    
+    // Автоматически выбираем первый стимул
+    setTimeout(() => {
+        autoSelectNextStimulus();
+    }, 50);
+}
+
+function displayStroopCard1() {
+    const grid = document.getElementById('stroop-grid1');
+    grid.innerHTML = '';
+    stroopElements = [];
+    
+    stroopCard1Data.forEach((row, rowIndex) => {
+        row.forEach((word, colIndex) => {
+            const index = rowIndex * 10 + colIndex;
+            const div = document.createElement('div');
+            div.className = 'word-stimulus';
+            div.textContent = word.toUpperCase();
+            div.style.color = '#263238';
+            div.dataset.index = index;
+            div.dataset.correct = word;
+            div.onclick = () => selectStroopStimulus(index, div);
+            grid.appendChild(div);
+            stroopElements.push(div);
+        });
+    });
+    
+    document.getElementById('stroop-errors1').textContent = '0';
+    document.getElementById('stroop-progress1').textContent = '0';
+}
+
+function startStroopCard2() {
+    currentStroopCard = 2;
+    currentStroopIndex = 0;
+    stroopElements = [];
+    showScreen('stroop-card2');
+    displayStroopCard2();
+    startStroopTimer(2);
+    stroopData.card2.startTime = Date.now();
+    stroopData.card2.errors = 0;
+    stroopData.card2.responses = [];
+    
+    // Автоматически выбираем первый стимул
+    setTimeout(() => {
+        autoSelectNextStimulus();
+    }, 50);
+}
+
+function displayStroopCard2() {
+    const grid = document.getElementById('stroop-grid2');
+    grid.innerHTML = '';
+    stroopElements = [];
+    
+    stroopCard2Data.forEach((row, rowIndex) => {
+        row.forEach((color, colIndex) => {
+            const index = rowIndex * 10 + colIndex;
+            const div = document.createElement('div');
+            div.className = 'hexagon-stimulus';
+            div.style.backgroundColor = getColorCode(color);
+            div.dataset.index = index;
+            div.dataset.correct = color;
+            div.onclick = () => selectStroopStimulus(index, div);
+            grid.appendChild(div);
+            stroopElements.push(div);
+        });
+    });
+    
+    document.getElementById('stroop-errors2').textContent = '0';
+    document.getElementById('stroop-progress2').textContent = '0';
+}
+
+function startStroopCard3() {
+    currentStroopCard = 3;
+    currentStroopIndex = 0;
+    stroopElements = [];
+    showScreen('stroop-card3');
+    displayStroopCard3();
+    startStroopTimer(3);
+    stroopData.card3.startTime = Date.now();
+    stroopData.card3.errors = 0;
+    stroopData.card3.responses = [];
+    
+    // Автоматически выбираем первый стимул
+    setTimeout(() => {
+        autoSelectNextStimulus();
+    }, 50);
+}
+
+function displayStroopCard3() {
+    const grid = document.getElementById('stroop-grid3');
+    grid.innerHTML = '';
+    stroopElements = [];
+    
+    stroopCard3Data.words.forEach((row, rowIndex) => {
+        row.forEach((word, colIndex) => {
+            const index = rowIndex * 10 + colIndex;
+            const color = stroopCard3Data.colors[rowIndex][colIndex];
+            const div = document.createElement('div');
+            div.className = 'word-stimulus';
+            div.textContent = word.toUpperCase();
+            div.style.color = getColorCode(color);
+            div.dataset.index = index;
+            div.dataset.correct = color;
+            div.onclick = () => selectStroopStimulus(index, div);
+            grid.appendChild(div);
+            stroopElements.push(div);
+        });
+    });
+    
+    document.getElementById('stroop-errors3').textContent = '0';
+    document.getElementById('stroop-progress3').textContent = '0';
+}
+
+function selectStroopStimulus(index, element) {
+    // Проверяем, не отвечен ли уже этот стимул
+    if (element.classList.contains('answered')) {
+        return;
+    }
+    
+    // Если выбран другой стимул, чем текущий автоматический - обновляем индекс
+    if (index !== currentStroopIndex) {
+        currentStroopIndex = index;
+    }
+    
+    // Убираем выделение со всех стимулов
+    stroopElements.forEach(el => {
+        el.style.borderColor = '#e1f5fe';
+        el.style.transform = 'none';
+    });
+    
+    // Выделяем текущий стимул
+    element.style.borderColor = '#4fc3f7';
+    element.style.transform = 'scale(1.05)';
+    
+    // Сохраняем текущий выбранный стимул
+    window.currentStroopStimulus = { index, element };
+}
+
+function autoSelectNextStimulus() {
+    // Находим следующий неотвеченный стимул
+    let nextIndex = -1;
+    for (let i = currentStroopIndex; i < stroopElements.length; i++) {
+        if (!stroopElements[i].classList.contains('answered')) {
+            nextIndex = i;
+            break;
+        }
+    }
+    
+    // Если не нашли после текущего, ищем с начала
+    if (nextIndex === -1) {
+        for (let i = 0; i < currentStroopIndex; i++) {
+            if (!stroopElements[i].classList.contains('answered')) {
+                nextIndex = i;
+                break;
+            }
+        }
+    }
+    
+    // Если нашли следующий стимул - выбираем его
+    if (nextIndex !== -1) {
+        currentStroopIndex = nextIndex;
+        selectStroopStimulus(nextIndex, stroopElements[nextIndex]);
+    }
+}
+
+function stroopResponse(selectedColor) {
+    if (!window.currentStroopStimulus) {
+        alert("Пожалуйста, выберите стимул сначала");
+        return;
+    }
+
+    const { element } = window.currentStroopStimulus;
+    const cardData = stroopData[`card${currentStroopCard}`];
+    const correctAnswer = element.dataset.correct;
+
+    // Помечаем стимул как отвеченный
+    element.classList.add('answered');
+    
+    // Проверяем правильность ответа
+    const isCorrect = selectedColor === correctAnswer;
+    
+    if (isCorrect) {
+        element.classList.add('correct');
+    } else {
+        element.classList.add('incorrect');
+        cardData.errors++;
+        document.getElementById(`stroop-errors${currentStroopCard}`).textContent = cardData.errors;
+    }
+
+    // Записываем ответ (только если была ошибка)
+    if (!isCorrect) {
+        cardData.responses.push({
+            index: currentStroopIndex,
+            selected: selectedColor,
+            correct: correctAnswer
+        });
+    }
+
+    // Обновляем прогресс
+    const progress = document.querySelectorAll(`#stroop-grid${currentStroopCard} .answered`).length;
+    document.getElementById(`stroop-progress${currentStroopCard}`).textContent = progress;
+
+    // Сбрасываем текущий стимул
+    window.currentStroopStimulus = null;
+
+    // Автоматически переходим к следующему стимулу
+    if (progress < 100) {
+        setTimeout(() => {
+            autoSelectNextStimulus();
+        }, 50);
+    } else {
+        finishStroopCard(currentStroopCard);
+    }
+}
+
+// Отдельные функции для каждой карточки Струпа
+function stroopResponse2(selectedColor) {
+    stroopResponse(selectedColor);
+}
+
+function stroopResponse3(selectedColor) {
+    stroopResponse(selectedColor);
+}
+
+function finishStroopCard(cardNumber) {
+    clearInterval(stroopTimerInterval);
+    const cardData = stroopData[`card${cardNumber}`];
+    cardData.time = Math.round((Date.now() - cardData.startTime) / 1000);
+    
+    // Сохраняем в researchData
+    researchData.stroop = researchData.stroop || {};
+    researchData.stroop[`card${cardNumber}`] = {
+        time: cardData.time,
+        errors: cardData.errors,
+        errorResponses: cardData.responses
+    };
+
+    showScreen(`stroop-results${cardNumber}`);
+}
+
+function startStroopTimer(cardNumber) {
+    let startTime = Date.now();
+    const timerElement = document.getElementById(`stroop-timer${cardNumber}`);
+    
+    clearInterval(stroopTimerInterval);
+    stroopTimerInterval = setInterval(() => {
+        const elapsed = Math.floor((Date.now() - startTime) / 1000);
+        timerElement.textContent = elapsed;
+    }, 1000);
+}
+
+// ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
+function getColorCode(color) {
+    const colors = {
+        'красный': '#f44336',
+        'синий': '#2196f3',
+        'зеленый': '#4caf50',
+        'желтый': '#ffeb3b'
+    };
+    return colors[color] || '#000000';
+}
+
+// Инициализация при загрузке страницы
+document.addEventListener('DOMContentLoaded', function() {
+    // Добавляем обработчики событий
+    document.getElementById('religion').addEventListener('change', function() {
+        const otherField = document.getElementById('religion_other');
+        otherField.style.display = this.value === 'other' ? 'block' : 'none';
+    });
+
+    document.getElementById('has_ms').addEventListener('change', function() {
+        const durationGroup = document.getElementById('ms_duration_group');
+        const courseGroup = document.getElementById('ms_course_group');
+        
+        if (this.value === 'yes') {
+            durationGroup.style.display = 'block';
+            courseGroup.style.display = 'block';
+        } else {
+            durationGroup.style.display = 'none';
+            courseGroup.style.display = 'none';
+        }
+    });
+});
+  </script>
+  </body>
+</html>
