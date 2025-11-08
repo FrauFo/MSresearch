@@ -459,6 +459,25 @@
     .hidden-stats {
       display: none !important;
     }
+
+    /* Улучшение для тач-устройств */
+    button, .response-btn, .option, .tmt-circle, .word-stimulus, .hexagon-stimulus {
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+
+    /* Убираем выделение при тапе */
+    * {
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    /* Но оставляем выделение для полей ввода */
+    input, textarea, select {
+      -webkit-user-select: text;
+      user-select: text;
+    }
     
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
@@ -470,29 +489,8 @@
       25% { transform: translateX(-5px); }
       75% { transform: translateX(5px); }
     }
-
-    /* Масштаб для ТМТ на мобильных */
-@media (max-width: 768px) {
-  .tmt-container {
-    transform: scale(0.6);
-    transform-origin: top center;
-    margin-left: -100px;
-  }
 }
-
-/* Масштаб для Струпа на мобильных */
-@media (max-width: 768px) {
-  .stimulus-grid {
-    transform: scale(0.7);
-    transform-origin: top center;
-    margin-left: -50px;
-  }
-  
-  .response-buttons {
-    transform: scale(0.9);
-    transform-origin: top center;
-  }
-}
+    
   </style>
 </head>
 <body>
@@ -1930,3 +1928,4 @@ document.addEventListener('DOMContentLoaded', function() {
   </body>
 
 </html>
+
