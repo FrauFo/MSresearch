@@ -459,87 +459,7 @@
     .hidden-stats {
       display: none !important;
     }
-
-    /* Мобильная адаптация TMT */
-    @media (max-width: 768px) {
-      .tmt-container {
-        width: 100%;
-        height: 400px;
-        transform: scale(0.9);
-        transform-origin: top center;
-        margin: 10px auto;
-        border: 2px solid #e9ecef;
-        overflow: scroll;
-      }
-      
-      .tmt-circle {
-        width: 40px;
-        height: 40px;
-        font-size: 12px;
-        font-weight: bold;
-      }
-      
-      .timer, .error-count {
-        font-size: 16px;
-        padding: 8px 12px;
-        margin: 5px;
-        display: block;
-        text-align: center;
-      }
-      
-      .stimulus-grid {
-        grid-template-columns: repeat(10, 1fr);
-      }
-      
-      .options {
-        grid-template-columns: 1fr;
-      }
-      
-      .hexagon-stimulus {
-        width: 35px;
-        height: 40px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .tmt-container {
-        height: 350px;
-        transform: scale(0.8);
-      }
-      
-      .tmt-circle {
-        width: 35px;
-        height: 35px;
-        font-size: 11px;
-      }
-    }
-
-    @media (max-width: 375px) {
-      .tmt-container {
-        height: 300px;
-        transform: scale(0.5);
-      }
-    }
-
-    /* Улучшение для тач-устройств */
-    button, .response-btn, .option, .tmt-circle, .word-stimulus, .hexagon-stimulus {
-      -webkit-tap-highlight-color: transparent;
-      touch-action: manipulation;
-    }
-
-    /* Убираем выделение при тапе */
-    * {
-      -webkit-touch-callout: none;
-      -webkit-user-select: none;
-      user-select: none;
-    }
-
-    /* Но оставляем выделение для полей ввода */
-    input, textarea, select {
-      -webkit-user-select: text;
-      user-select: text;
-    }
-
+    
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
@@ -556,7 +476,7 @@
   .tmt-container {
     transform: scale(0.6);
     transform-origin: top center;
-    /*margin-left: -100px;*/
+    margin-left: -100px;
   }
 }
 
@@ -565,7 +485,7 @@
   .stimulus-grid {
     transform: scale(0.7);
     transform-origin: top center;
-    /*margin-left: -50px;*/
+    margin-left: -50px;
   }
   
   .response-buttons {
@@ -2008,4 +1928,5 @@ document.addEventListener('DOMContentLoaded', function() {
 });
   </script>
   </body>
+
 </html>
