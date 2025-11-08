@@ -656,17 +656,6 @@
       <div class="tmt-container" id="tmt-board"></div>
     </div>
 
-    <!-- TMT Результаты -->
-    <div id="tmt-results" class="screen">
-      <div class="header">
-        <h2>Тест TMT завершен</h2>
-      </div>
-      <div class="instructions">
-        <p>Переходите к следующему опроснику.</p>
-      </div>
-      <button onclick="showScreen('cope-instruction')">Далее</button>
-    </div>
-
     <!-- COPE Инструкция -->
     <div id="cope-instruction" class="screen">
       <div class="header">
@@ -1258,7 +1247,7 @@ function finishTMT() {
         sequence: tmtData.currentSequence.join(' → ')
     };
     
-    showScreen('tmt-results');
+    showScreen('cope-instruction');
 }
 
 // COPE ЛОГИКА
@@ -1928,4 +1917,5 @@ document.addEventListener('DOMContentLoaded', function() {
   </body>
 
 </html>
+
 
