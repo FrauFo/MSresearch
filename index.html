@@ -739,17 +739,6 @@
       <div class="stimulus-grid" id="stroop-grid1"></div>
     </div>
 
-    <!-- Струп Результаты 1 -->
-    <div id="stroop-results1" class="screen">
-      <div class="header">
-        <h2>Карточка 1 завершена</h2>
-      </div>
-      <div class="instructions">
-        <p>Переходите к следующей.</p>
-      </div>
-      <button onclick="showScreen('stroop-instruction2')">Далее</button>
-    </div>
-
     <!-- Струп Инструкция 2 -->
     <div id="stroop-instruction2" class="screen">
       <div class="header">
@@ -780,17 +769,6 @@
       <div class="stimulus-grid" id="stroop-grid2"></div>
     </div>
 
-    <!-- Струп Результаты 2 -->
-    <div id="stroop-results2" class="screen">
-      <div class="header">
-        <h2>Карточка 2 завершена</h2>
-      </div>
-      <div class="instructions">
-        <p> Переходите к следующей.</p>
-      </div>
-      <button onclick="showScreen('stroop-instruction3')">Далее</button>
-    </div>
-
     <!-- Струп Инструкция 3 -->
     <div id="stroop-instruction3" class="screen">
       <div class="header">
@@ -819,17 +797,6 @@
         <button class="response-btn" onclick="stroopResponse3('зеленый')">ЗЕЛЕНЫЙ</button>
       </div>
       <div class="stimulus-grid" id="stroop-grid3"></div>
-    </div>
-
-    <!-- Струп Результаты 3 -->
-    <div id="stroop-results3" class="screen">
-      <div class="header">
-        <h2>Карточка 3 завершена</h2>
-      </div>
-      <div class="instructions">
-        <p>Все карточки завершены!</p>
-      </div>
-      <button onclick="finishAllTests()">Завершить исследование</button>
     </div>
 
     <!-- Финальный экран -->
@@ -1867,7 +1834,12 @@ function finishStroopCard(cardNumber) {
         errorResponses: cardData.responses
     };
 
-    showScreen(`stroop-results${cardNumber}`);
+  if (cardNumber === 3) {
+      finishAllTests();  
+  }
+  else {
+      showScreen(`stroop-instruction${cardNumber + 1}`);
+  }
 }
 
 function startStroopTimer(cardNumber) {
@@ -1917,5 +1889,6 @@ document.addEventListener('DOMContentLoaded', function() {
   </body>
 
 </html>
+
 
 
