@@ -299,7 +299,7 @@
     .hexagon-stimulus {
       width: 43px;
       height: 48px;
-      margin: 1px 3px;
+      margin: 3px;
       cursor: pointer;
       display: inline-block;
       border: 2px solid #e1f5fe;
@@ -522,6 +522,11 @@
       <button onclick="showScreen('demographics')">Начать исследование</button>
     </div>
 
+    <div class="form-group">
+        <div id="cerq-error-message" style="display: none; background: #ffebee; color: #f44336; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #f44336;">
+          <strong>Пожалуйста, заполните все обязательные вопросы!</strong>
+        </div>
+      
     <!-- Демографические данные -->
     <div id="demographics" class="screen">
       <div class="header">
@@ -624,7 +629,14 @@
 
         <div class="form-group" id="ms_course_group" style="display: none;">
           <label>9. Какое течение болезни у вас?</label>
-          <input type="text" id="ms_course" placeholder="Опишите течение болезни">
+          <select id="ms_course">
+            <option value="">Выберите вариант</option>
+            <option value="pprs">ППРС (первично-прогрессирующий рассеянный склероз)</option>
+            <option value="rrrs">PPPC (рецидивирующе-ремиттирующий рассеянный склероз)</option>
+            <option value="vprs">ВПРС (вторично-прогрессирующий рассеянный склероз)</option>
+            <option value="rprs">РПРС (ремиттирующе-прогрессирующий рассеянный склероз)</option>
+            <input type="text" id="religion_other" placeholder="Укажите другое" style="display: none; margin-top: 10px;">
+          //<input type="text" id="ms_course" placeholder="Опишите течение болезни">//
         </div>
 
         <div class="form-group">
@@ -1916,6 +1928,7 @@ document.addEventListener('DOMContentLoaded', function() {
   </script>
   </body>
 </html>
+
 
 
 
