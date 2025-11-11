@@ -956,8 +956,8 @@ function showScreen(screenId) {
 
 // ВАЛИДАЦИЯ ДЕМОГРАФИЧЕСКИХ ДАННЫХ
 function validateDemographics() {
-    const required = ['initials', 'gender', 'age', 'education', 'has_ms', 'country', 'city', 'residence_type'];
-    let valid = true;
+    const required = ['initials', 'gender', 'age', 'education', 'country', 'city', 'has_ms', 'ms_duration', 'ms_course', 'medication', 'psychologist_therapy', 'residence_type'];
+    let valid = true;  
 
     required.forEach(field => {
         const element = document.getElementById(field);
@@ -1922,6 +1922,7 @@ document.addEventListener('DOMContentLoaded', function() {
   </script>
   </body>
 </html>
+
 
 
 
